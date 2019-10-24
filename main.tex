@@ -60,6 +60,36 @@
 
 % START START START START START START START START START START START START START
 
+\begin{frame}{What end-user physics analysts need}
+\Large
+\vspace{0.25 cm}
+
+\begin{columns}
+\column{0.5\linewidth}
+\begin{center}
+\textcolor{darkblue}{rich data structures and}
+
+\textcolor{darkblue}{structure-changing operations}
+\end{center}
+
+\vspace{0.25 cm}
+A general programming language like C++ or Python provides this, though C++ is hard to use for data analysis and Python is slow.
+
+\column{0.5\linewidth}
+\begin{center}
+\textcolor{darkblue}{interactive commands:}
+
+\textcolor{darkblue}{many operations in one call}
+\end{center}
+
+\vspace{0.25 cm}
+Data-oriented DSLs like NumPy and Pandas do this, but only for simple data structures: rectilinear arrays of numbers.
+\end{columns}
+
+
+
+\end{frame}
+
 \begin{frame}{asdf}
 \vspace{0.5 cm}
 \begin{columns}
@@ -68,8 +98,7 @@
 \end{columns}
 \end{frame}
 
-
-\begin{frame}{Awkward Array is widely used in particle physics}
+\begin{frame}{Now have 1 year of user feedback and maintainance experience}
 \large
 \vspace{0.5 cm}
 
@@ -78,7 +107,7 @@
 \includegraphics[width=\linewidth]{pip-timeline.pdf}
 
 \vspace{0.1 cm}
-\centering \textcolor{gray}{(almost 100 downloads/day)}
+\centering \textcolor{darkblue}{\fbox{awkward has 100 downloads/day, 2 issues/week}}
 
 \column{0.3\linewidth}
 \hfill\includegraphics[width=0.8\linewidth]{pip-country-awkward.pdf}
