@@ -94,11 +94,11 @@ Results should pop up quickly enough that you don't lose your train of thought.
 \end{columns}
 \end{frame}
 
-\begin{frame}{Composable columnar data structures}
+\begin{frame}{Composable, vectorization-friendly data structures}
 \large
 \vspace{0.25 cm}
 \begin{center}
-\only<1>{An array of variable-length arrays (``ragged'' or ``jagged'') can be built out of flattened contents and offsets to the beginning of each subarray.}\only<2>{Multiple levels of variable-length arrays (``doubly jagged'') can be built by using one jagged array as the content of the other.}\only<3>{More complex data structures can be built by adding columnar components, such as records with named fields, mixed data types, pointers, lazy loading\ldots}
+\only<1>{An array of variable-length arrays (``ragged'' or ``jagged'') can be built out of flattened contents and offsets specifying the beginning of each subarray.}\only<2>{Multiple levels of variable-length arrays (``doubly jagged'') can be built by using one jagged array as the content of the other.}\only<3>{More complex data structures can be built by adding columnar components, such as records with named fields, mixed data types, pointers, lazy loading\ldots}
 \end{center}
 
 \vspace{-0.25 cm}
@@ -149,7 +149,7 @@ Separate structural operations (e.g.\ cross-join) from physics (e.g.\ cross-prod
 \begin{uncoverenv}<2->
 \begin{block}{\Large From maintenance:}
 \vspace{0.2 cm}
-Current implementation is entirely written in Numpy.
+Current implementation is entirely written in Python/Numpy.
 
 \vspace{0.2 cm}
 For better flexibility, robustness, and uniformity, and in a few cases, speed, it should be rewritten in C++.
