@@ -60,7 +60,7 @@
 
 % START START START START START START START START START START START START START
 
-\begin{frame}{Post-reconstruction, physics analyzers need\ldots}
+\begin{frame}{After reconstruction, physics analyzers need\ldots}
 \Large
 
 \begin{columns}
@@ -69,26 +69,50 @@
 \textcolor{darkblue}{\LARGE rich data structures}
 \end{center}
 
-\vspace{0.25 cm}
 A general programming language like C++ or Python provides this, though C++ is hard to use for data analysis and Python is slow.
 
 \column{0.5\linewidth}
+\begin{uncoverenv}<2->
 \begin{center}
 \textcolor{darkblue}{\LARGE interactivity}
-
 \end{center}
 
-\vspace{0.25 cm}
 Data-oriented DSLs like NumPy and Pandas are convenient, but only for simple data: rectilinear arrays of numbers.
+\end{uncoverenv}
+\end{columns}
+
+\vspace{0.25 cm}
+\begin{columns}
+\column{0.5\linewidth}
+\begin{uncoverenv}<3->
+\begin{center}
+\textcolor{darkblue}{\LARGE speed}
+\end{center}
+
+Results should pop up quickly enough that you don't lose your train of thought.
+\end{uncoverenv}
 \end{columns}
 \end{frame}
 
-\begin{frame}{asdf}
-\vspace{0.5 cm}
+\begin{frame}{Composable columnar data structures}
+\large
+\vspace{0.25 cm}
+\begin{center}
+\only<1>{An array of variable-length arrays (``ragged'' or ``jagged'') can be built out of flattened contents and offsets to the beginning of each subarray.}\only<2>{Multiple levels of variable-length arrays (``doubly jagged'') can be built by using one jagged array as the content of the other.}\only<3>{More complex data structures can be built by adding columnar components, such as records with named fields, mixed data types, pointers, lazy loading\ldots}
+\end{center}
+
+\vspace{-0.25 cm}
 \begin{columns}
 \column{1.15\linewidth}
 \only<1>{\includegraphics[width=\linewidth]{composable-1.pdf}}\only<2>{\includegraphics[width=\linewidth]{composable-2.pdf}}\only<3>{\includegraphics[width=\linewidth]{composable-3.pdf}}
 \end{columns}
+\end{frame}
+
+\begin{frame}{\mbox{ }}
+\vspace{0.5 cm}
+\begin{center}
+\includegraphics[width=0.5\linewidth]{awkward-logo.pdf}
+\end{center}
 \end{frame}
 
 \begin{frame}{Now have 1 year of user feedback and maintainance experience}
