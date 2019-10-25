@@ -115,7 +115,7 @@ Results should pop up quickly enough that you don't lose your train of thought.
 \end{center}
 \end{frame}
 
-\begin{frame}{Now have 1 year of user feedback and maintainance experience}
+\begin{frame}{We now have 1 year of user feedback and maintainance experience}
 \large
 \vspace{0.5 cm}
 
@@ -133,5 +133,58 @@ Results should pop up quickly enough that you don't lose your train of thought.
 \hspace{-0.25 cm}\includegraphics[width=\linewidth]{uproot-issues.pdf}
 \end{columns}
 \end{frame}
+
+\begin{frame}{What I've learned}
+\large
+\vspace{0.5 cm}
+\begin{block}{\Large From feedback and tutorials:}
+\vspace{0.2 cm}
+The interface needs to be simpler: a single \mintinline{python}{awkward.Array} class to hide the \mintinline{python}{ListArray} $\to$ \mintinline{python}{RecordArray} $\to$ \mintinline{python}{NumpyArrays} structure.
+
+\vspace{0.2 cm}
+Separate structural operations (e.g.\ cross-join) from physics (e.g.\ cross-product).
+\end{block}
+
+\vspace{0.5 cm}
+\begin{uncoverenv}<2->
+\begin{block}{\Large From maintenance:}
+\vspace{0.2 cm}
+Current implementation is entirely written in Numpy.
+
+\vspace{0.2 cm}
+For better flexibility, robustness, and uniformity, and in a few cases, speed, it should be rewritten in C++.
+\end{block}
+\end{uncoverenv}
+\end{frame}
+
+\begin{frame}{New architecture}
+\large
+\vspace{0.5 cm}
+\begin{columns}
+\column{0.5\linewidth}
+\vspace{-0.2 cm}
+
+\textcolor{darkblue}{Layer 1:} Python user interface: a single \mintinline{python}{awkward.Array} class.
+\vspace{\baselineskip}
+
+\vspace{0.18 cm}
+\textcolor{darkblue}{Layer 2:} Structural classes in Python
+
+(e.g.\ \mintinline{python}{ListArray}/\mintinline{python}{RecordArray}).
+\vspace{\baselineskip}
+
+\vspace{0.18 cm}
+\textcolor{darkblue}{Layer 3:} Array allocation and ownership; reference counting. Two languages: C++ and Numba (compiled Python).
+\vspace{\baselineskip}
+
+\vspace{0.18 cm}
+\textcolor{darkblue}{Layer 4:} Implementations, where we write \mintinline{python}{for} loops. The only layer that needs to be optimized for speed.
+
+\column{0.5\linewidth}
+\includegraphics[width=\linewidth]{awkward-1-0-layers.pdf}
+\end{columns}
+\end{frame}
+
+
 
 \end{document}
