@@ -200,20 +200,102 @@ For better flexibility, robustness, and uniformity, and in a few cases, speed, i
 \vspace{\baselineskip}
 
 \vspace{0.18 cm}
+\begin{uncoverenv}<2->
 \textcolor{darkblue}{Layer 2:} Structural classes in Python
 
 (e.g.\ \mintinline{python}{ListArray}/\mintinline{python}{RecordArray}).
+\end{uncoverenv}
 \vspace{\baselineskip}
 
 \vspace{0.18 cm}
+\begin{uncoverenv}<3->
 \textcolor{darkblue}{Layer 3:} Array allocation and ownership; reference counting. Two languages: C++ and Numba (compiled Python).
+\end{uncoverenv}
 \vspace{\baselineskip}
 
 \vspace{0.18 cm}
+\begin{uncoverenv}<4->
 \textcolor{darkblue}{Layer 4:} Implementations, where we write \mintinline{python}{for} loops. The only layer that needs to be optimized for speed.
+\end{uncoverenv}
 
 \column{0.5\linewidth}
 \includegraphics[width=\linewidth]{awkward-1-0-layers.pdf}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Greater generality}
+\large
+\vspace{0.5 cm}
+\hfill\mbox{\includegraphics[height=4 cm]{awkward-1-0-layers-mini-pybind11.pdf}\hspace{-0.75 cm}}
+
+\vspace{-4 cm}
+\begin{columns}
+\column{1.1\linewidth}
+The current implementation has some hidden limitations, such as \\ slicing in more than two jagged dimensions.
+
+\scriptsize
+\begin{minted}{python}
+>>> import awkward
+>>> array = awkward.fromiter([[[0.0, 1.1, 2.2], [], [3.3, 4.4]],
+...                           [[5.5]], [], [[6.6, 7.7, 8.8, 9.9]]])
+>>> a[:, ::-1, ::2].tolist()
+\end{minted}
+\begin{Verbatim}[commandchars=\\\{\}]
+NotImplementedError: this implementation cannot slice a JaggedArray
+                     in more than two dimensions
+\end{Verbatim}
+
+\large
+\vspace{0.5 cm}
+But the new implementation is based on recursive procedures that \\ can go arbitrarily deep.
+
+\scriptsize
+\begin{minted}{python}
+>>> import awkward1
+>>> array = awkward1.fromiter([[[0.0, 1.1, 2.2], [], [3.3, 4.4]],
+...                            [[5.5]], [], [[6.6, 7.7, 8.8, 9.9]]])
+>>> awkward1.tolist(a[:, ::-1, ::2])
+\end{minted}
+\begin{Verbatim}[commandchars=\\\{\}]
+[[[[6.6, 7.7, 8.8, 9.9]], [], [[5.5]], [[0.0, 1.1, 2.2], [3.3, 4.4]]]]
+\end{Verbatim}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Full access in C++}
+\large
+\vspace{0.5 cm}
+\hfill\mbox{\includegraphics[height=4 cm]{awkward-1-0-layers-mini-cpp.pdf}\hspace{-0.75 cm}}
+
+\vspace{-4 cm}
+\begin{columns}
+\column{1.1\linewidth}
+Everything is available in C++ except the convenient syntax.
+
+\scriptsize
+\begin{minted}{c++}
+namespace ak = awkward;
+
+void build(ak::FillableArray& builder, double x) {
+  builder.real(x);
+}
+template <typename T>
+void build(ak::FillableArray& builder, const std::vector<T>& vector) {
+  builder.beginlist();
+  for (auto x : vector) build(builder, x);
+  builder.endlist();
+}
+int main(int, char**) {
+  std::vector<std::vector<std::vector<double>>> vector =
+    {{{0.0, 1.1, 2.2}, {}, {3.3, 4.4}}, {{5.5}}, {}, {{6.6, 7.7, 8.8, 9.9}}};
+  ak::FillableArray builder(ak::FillableOptions(1024, 2.0));
+  for (auto x : vector) build(builder, x);
+
+  if (builder.snapshot().get()->tojson(false, 1) !=
+         "[[[0.0,1.1,2.2],[],[3.3,4.4]],[[5.5]],[],[[6.6,7.7,8.8,9.9]]]") return -1;
+  return 0;
+}
+\end{minted}
 \end{columns}
 \end{frame}
 
