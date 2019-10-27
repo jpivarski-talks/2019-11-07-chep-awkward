@@ -62,14 +62,16 @@
 
 \begin{frame}{After reconstruction, physics analyzers need\ldots}
 \Large
+\vspace{-0.5 cm}
 
-\begin{columns}
+\begin{columns}[t]
 \column{0.5\linewidth}
 \begin{center}
 \textcolor{darkblue}{\LARGE rich data structures}
 \end{center}
 
-A general programming language like C++ or Python provides this, though C++ is hard to use for data analysis and Python is slow.
+\vspace{-0.2 cm}
+You can get that with C++ or Python, but C++ is verbose for analysis and Python is slow.
 
 \column{0.5\linewidth}
 \begin{uncoverenv}<2->
@@ -77,7 +79,8 @@ A general programming language like C++ or Python provides this, though C++ is h
 \textcolor{darkblue}{\LARGE interactivity}
 \end{center}
 
-Data-oriented DSLs like NumPy and Pandas are convenient, but only for simple data: rectilinear arrays of numbers.
+\vspace{-0.2 cm}
+Data-oriented DSLs like NumPy and Pandas are convenient, but only for rectangular arrays of numbers.
 \end{uncoverenv}
 \end{columns}
 
@@ -89,6 +92,7 @@ Data-oriented DSLs like NumPy and Pandas are convenient, but only for simple dat
 \textcolor{darkblue}{\LARGE speed}
 \end{center}
 
+\vspace{-0.2 cm}
 Results should pop up quickly enough that you don't lose your train of thought.
 \end{uncoverenv}
 \end{columns}
@@ -223,7 +227,7 @@ For better flexibility, robustness, and uniformity, and in a few cases, speed, i
 \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Greater generality}
+\begin{frame}[fragile]{First benefit: greater generality}
 \large
 \vspace{0.35 cm}
 \hfill\mbox{\includegraphics[height=4 cm]{awkward-1-0-layers-mini-pybind11.pdf}\hspace{-0.75 cm}}
@@ -387,10 +391,10 @@ extern "C" {
 
 \begin{frame}[fragile]{Investigated toy languages with sets as a first-class concept}
 \begin{center}
-\textcolor{blue}{\small \url{https://github.com/jpivarski/PartiQL}}
+\fbox{\textcolor{blue}{\small \url{https://github.com/jpivarski/PartiQL}}}
 \end{center}
 
-\vspace{-0.15 cm}
+\vspace{-0.25 cm}
 \begin{columns}
 \column{1.02\linewidth}
 \scriptsize
@@ -437,34 +441,40 @@ leptons = electrons \textcolor{darkgreen}{\textbf{union}} muons
 \begin{frame}{Multi-paradigm arrays}
 \large
 \vspace{0.75 cm}
-With a dataset in Awkward form (from TTrees, RNtuples, Arrow\ldots), we want to
+\textcolor{darkblue}{With a dataset in Awkward form (from TTrees, RNtuples, Arrow\ldots), we want to}
 
 \vspace{0.25 cm}
 \begin{itemize}\setlength{\itemsep}{0.25 cm}
-\item<2-> perform Numpy-like slicing, reduction, and vectorized operations,
-\item<3-> pass to/from a C++ library (e.g.\ jagged array of Lorentz vectors to FastJet),
-\item<4-> enter a compiled Numba function for imperative code in Python,
-\item<5-> evaluate a declarative expression on sets of particles,
+\item perform vectorized operations with a Numpy-like syntax,
+\item pass data to and from a C++ library,
+\item enter a compiled Numba function to write fast for loops,
+\item evaluate a declarative expression on sets of particles,
 \end{itemize}
 
 \vspace{0.25 cm}
-\uncover<6->{interchangeably.}
+\textcolor{darkblue}{interchangeably.}
 
 \vspace{0.5 cm}
 \begin{center}
-\uncover<7->{\textcolor{darkorange}{\bf Awkward 1.0 is intended as a solid foundation for that future.}}
+\uncover<2->{\textcolor{darkorange}{\bf Awkward 1.0 is intended as a solid foundation for that future.}}
 \end{center}
 \end{frame}
 
 \begin{frame}{When can I try it?}
 \Large
+\vspace{-0.25 cm}
+\begin{center}
+\fbox{\textcolor{blue}{\normalsize \url{https://github.com/scikit-hep/awkward-1.0}}}
+\end{center}
+
+\vspace{0.25 cm}
 \begin{center}
 \textcolor{darkblue}{Nowish:} it is in a testable state \textcolor{gray}{(for Coffea and thrill-seekers)}.
 
-\vspace{1 cm}
+\vspace{0.75 cm}
 Will be minimally usable for physics analysis in ``early 2020.''
 
-\vspace{1 cm}
+\vspace{0.75 cm}
 \end{center}
 
 Start an {\normalsize \mintinline{python}{import awkward}} $\to$ {\normalsize \mintinline{python}{import awkward0}} \\
