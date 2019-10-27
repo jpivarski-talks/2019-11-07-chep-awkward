@@ -225,7 +225,7 @@ For better flexibility, robustness, and uniformity, and in a few cases, speed, i
 
 \begin{frame}[fragile]{Greater generality}
 \large
-\vspace{0.5 cm}
+\vspace{0.35 cm}
 \hfill\mbox{\includegraphics[height=4 cm]{awkward-1-0-layers-mini-pybind11.pdf}\hspace{-0.75 cm}}
 
 \vspace{-4 cm}
@@ -241,8 +241,8 @@ The current implementation has some hidden limitations, such as \\ slicing in mo
 >>> array[::-1, ::2, 1:].tolist()
 \end{minted}
 \begin{Verbatim}[commandchars=\\\{\}]
-NotImplementedError: this implementation cannot slice a JaggedArray
-                     in more than two dimensions
+\textcolor{red}{NotImplementedError: this implementation cannot slice a JaggedArray}
+                     \textcolor{red}{in more than two dimensions}
 \end{Verbatim}
 
 \large
@@ -257,14 +257,16 @@ But the new implementation is based on recursive procedures that \\ can go arbit
 >>> awkward1.tolist(array[::-1, ::2, 1:])
 \end{minted}
 \begin{Verbatim}[commandchars=\\\{\}]
-[[[7.7, 8.8, 9.9]], [], [[]], [[1.1, 2.2], [4.4]]]
+\textcolor{red}{[[[7.7, 8.8, 9.9]], [], [[]], [[1.1, 2.2], [4.4]]]}
 \end{Verbatim}
+
+\vspace{5 cm}
 \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{Full access in C++}
 \large
-\vspace{0.5 cm}
+\vspace{0.35 cm}
 \hfill\mbox{\includegraphics[height=4 cm]{awkward-1-0-layers-mini-cpp.pdf}\hspace{-0.75 cm}}
 
 \vspace{-4 cm}
@@ -296,6 +298,8 @@ int main(int, char**) {
   return 0;
 }
 \end{minted}
+
+\vspace{5 cm}
 \end{columns}
 \end{frame}
 
