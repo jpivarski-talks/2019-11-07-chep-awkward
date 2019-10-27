@@ -303,6 +303,88 @@ int main(int, char**) {
 \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Full access in Numba}
+\large
+\vspace{0.35 cm}
+\hfill\mbox{\includegraphics[height=4 cm]{awkward-1-0-layers-mini-numba.pdf}\hspace{-0.75 cm}}
+
+\vspace{-4 cm}
+\begin{columns}
+\column{1.1\linewidth}
+Similarly, everything is available in functions compiled by Numba.
+
+\scriptsize
+\vspace{0.1 cm}
+\begin{minted}{python}
+>>> import numba
+>>>
+>>> @numba.jit(nopython=True)
+... def compileme(a):
+...     return a[::-1, ::2, 1:]
+... 
+>>> compileme
+\end{minted}
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{red}{CPUDispatcher(<function compileme at 0x7fd135e52ae8>)}
+\end{Verbatim}
+\begin{minted}{python}
+>>> array = awkward1.fromiter([[[0.0, 1.1, 2.2], [], [3.3, 4.4]],
+...                            [[5.5]], [], [[6.6, 7.7, 8.8, 9.9]]])
+>>> awkward1.tolist(compileme(array))
+\end{minted}
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{red}{[[[7.7, 8.8, 9.9]], [], [[]], [[1.1, 2.2], [4.4]]]}
+\end{Verbatim}
+
+\large
+\vspace{0.25 cm}
+\uncover<2->{Numba compiles a subset of Python; all data types must be known to the compiler.}
+
+\vspace{0.25 cm}
+\uncover<3->{Data analysts can start with pure Python and only accelerate the functions that need it.}
+
+\vspace{5 cm}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Single implementation}
+\large
+\vspace{0.35 cm}
+\hfill\mbox{\includegraphics[height=4 cm]{awkward-1-0-layers-mini-cpu.pdf}\hspace{-0.75 cm}}
+
+\vspace{-4 cm}
+\begin{columns}
+\column{1.1\linewidth}
+All interfaces---Python, C++, Numba---share the same implementation, \\ a pure C library of functions on arrays.
+
+\scriptsize
+\begin{minted}{c++}
+extern "C" {
+  Error awkward_listarray32_getitem_next_at_64(int64_t* tocarry,
+      const int32_t* fromstarts, const int32_t* fromstops,
+      int64_t lenstarts, int64_t startsoffset, int64_t stopsoffset,
+      int64_t at) {
+    // This is only only layer with loops over array elements.
+    for (int64_t i = 0;  i < lenstarts;  i++) {
+      int64_t length = fromstops[stopsoffset + i] -
+                       fromstarts[startsoffset + i];
+      int64_t regular_at = at;
+      if (regular_at < 0) {
+        regular_at += length;
+      }
+      if (!(0 <= regular_at  &&  regular_at < length)) {
+        return failure("index out of range", i, at);
+      }
+      tocarry[i] = fromstarts[startsoffset + i] + regular_at;
+    }
+    return success();
+}
+\end{minted}
+
+\vspace{5 cm}
+\end{columns}
+\end{frame}
+
 
 
 \end{document}
