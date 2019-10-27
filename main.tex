@@ -238,7 +238,7 @@ The current implementation has some hidden limitations, such as \\ slicing in mo
 >>> import awkward
 >>> array = awkward.fromiter([[[0.0, 1.1, 2.2], [], [3.3, 4.4]],
 ...                           [[5.5]], [], [[6.6, 7.7, 8.8, 9.9]]])
->>> a[:, ::-1, ::2].tolist()
+>>> array[::-1, ::2, 1:].tolist()
 \end{minted}
 \begin{Verbatim}[commandchars=\\\{\}]
 NotImplementedError: this implementation cannot slice a JaggedArray
@@ -254,10 +254,10 @@ But the new implementation is based on recursive procedures that \\ can go arbit
 >>> import awkward1
 >>> array = awkward1.fromiter([[[0.0, 1.1, 2.2], [], [3.3, 4.4]],
 ...                            [[5.5]], [], [[6.6, 7.7, 8.8, 9.9]]])
->>> awkward1.tolist(a[:, ::-1, ::2])
+>>> awkward1.tolist(array[::-1, ::2, 1:])
 \end{minted}
 \begin{Verbatim}[commandchars=\\\{\}]
-[[[[6.6, 7.7, 8.8, 9.9]], [], [[5.5]], [[0.0, 1.1, 2.2], [3.3, 4.4]]]]
+[[[7.7, 8.8, 9.9]], [], [[]], [[1.1, 2.2], [4.4]]]
 \end{Verbatim}
 \end{columns}
 \end{frame}
@@ -275,24 +275,24 @@ Everything is available in C++ except the convenient syntax.
 \scriptsize
 \begin{minted}{c++}
 namespace ak = awkward;
-
-void build(ak::FillableArray& builder, double x) {
-  builder.real(x);
-}
-template <typename T>
-void build(ak::FillableArray& builder, const std::vector<T>& vector) {
-  builder.beginlist();
-  for (auto x : vector) build(builder, x);
-  builder.endlist();
-}
 int main(int, char**) {
   std::vector<std::vector<std::vector<double>>> vector =
-    {{{0.0, 1.1, 2.2}, {}, {3.3, 4.4}}, {{5.5}}, {}, {{6.6, 7.7, 8.8, 9.9}}};
-  ak::FillableArray builder(ak::FillableOptions(1024, 2.0));
-  for (auto x : vector) build(builder, x);
+      {{{0.0, 1.1, 2.2}, {}, {3.3, 4.4}}, {{5.5}}, {},
+       {{6.6, 7.7, 8.8, 9.9}}};
 
-  if (builder.snapshot().get()->tojson(false, 1) !=
-         "[[[0.0,1.1,2.2],[],[3.3,4.4]],[[5.5]],[],[[6.6,7.7,8.8,9.9]]]") return -1;
+  ak::FillableArray builder(ak::FillableOptions(1024, 2.0));
+  for (auto x : vector)
+      builder.fill(x);
+  std::shared_ptr<ak::Content> array = builder.snapshot();
+
+  ak::Slice slice;
+  slice.append(ak::SliceRange(ak::Slice::none(), ak::Slice::none(), -1));   // ::-1
+  slice.append(ak::SliceRange(ak::Slice::none(), ak::Slice::none(), 2));    // ::2
+  slice.append(ak::SliceRange(1, ak::Slice::none(), ak::Slice::none()));    // 1:
+
+  if (array.get()->getitem(slice).get()->tojson(false, 1) !=
+         "[[[7.7,8.8,9.9]],[],[[]],[[1.1,2.2],[4.4]]]")
+      return -1;
   return 0;
 }
 \end{minted}
