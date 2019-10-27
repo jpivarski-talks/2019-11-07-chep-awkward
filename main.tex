@@ -430,7 +430,45 @@ leptons = electrons \textcolor{darkgreen}{\textbf{union}} muons
 \end{columns}
 \end{frame}
 
+\begin{frame}{PERFORMANCE PLOTS}
 
+\end{frame}
 
+\begin{frame}{Multi-paradigm arrays}
+\large
+\vspace{0.75 cm}
+With a dataset in Awkward form (from TTrees, RNtuples, Arrow\ldots), we want to
+
+\vspace{0.25 cm}
+\begin{itemize}\setlength{\itemsep}{0.25 cm}
+\item<2-> perform Numpy-like slicing, reduction, and vectorized operations,
+\item<3-> pass to/from a C++ library (e.g.\ jagged array of Lorentz vectors to FastJet),
+\item<4-> enter a compiled Numba function for imperative code in Python,
+\item<5-> evaluate a declarative expression on sets of particles,
+\end{itemize}
+
+\vspace{0.25 cm}
+\uncover<6->{interchangeably.}
+
+\vspace{0.5 cm}
+\begin{center}
+\uncover<7->{\textcolor{darkorange}{\bf Awkward 1.0 is intended as a solid foundation for that future.}}
+\end{center}
+\end{frame}
+
+\begin{frame}{When can I try it?}
+\Large
+\begin{center}
+\textcolor{darkblue}{Nowish:} it is in a testable state \textcolor{gray}{(for Coffea and thrill-seekers)}.
+
+\vspace{1 cm}
+Will be minimally usable for physics analysis in ``early 2020.''
+
+\vspace{1 cm}
+\end{center}
+
+Start an {\normalsize \mintinline{python}{import awkward}} $\to$ {\normalsize \mintinline{python}{import awkward0}} \\
+\phantom{Start an} {\normalsize \mintinline{python}{import awkward1}} $\to$ {\normalsize \mintinline{python}{import awkward}} transition by spring.
+\end{frame}
 
 \end{document}
