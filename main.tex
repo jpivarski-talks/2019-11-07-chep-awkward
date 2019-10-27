@@ -385,6 +385,52 @@ extern "C" {
 \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Investigated toy languages with sets as a first-class concept}
+\begin{center}
+\textcolor{blue}{\small \url{https://github.com/jpivarski/PartiQL}}
+\end{center}
+
+\vspace{-0.15 cm}
+\begin{columns}
+\column{1.02\linewidth}
+\scriptsize
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{gray}{# "For events with at least three leptons (electrons or muons) and a same-flavor}
+\textcolor{gray}{# opposite-sign lepton pair, find the same-flavor opposite-sign lepton pair with a}
+\textcolor{gray}{# mass closest to 91.2 GeV; make a histogram of the pT of the leading other lepton."}
+\end{Verbatim}
+
+\small
+\vspace{-0.25 cm}
+\begin{Verbatim}[commandchars=\\\{\}]
+leptons = electrons \textcolor{darkgreen}{\textbf{union}} muons
+\end{Verbatim}
+
+\vspace{-0.45 cm}
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{darkgreen}{\textbf{cut}} \textcolor{blue}{count}(leptons) >= \textcolor{darkorange}{3} \textcolor{darkgreen}{\textbf{named}} \textcolor{darkorange}{"three_leptons"} \{
+    Z = electrons \textcolor{darkgreen}{\textbf{as}} (lep1, lep2) \textcolor{darkgreen}{\textbf{union}} muons \textcolor{darkgreen}{\textbf{as}} (lep1, lep2)
+            \textcolor{darkgreen}{\textbf{where}} lep1\textcolor{blue}{.charge} != lep2\textcolor{blue}{.charge}
+            \textcolor{darkgreen}{\textbf{min by}} \textcolor{blue}{abs}(\textcolor{blue}{mass}(lep1, lep2) - \textcolor{darkorange}{91.2})
+\end{Verbatim}
+
+\vspace{-0.45 cm}
+\begin{Verbatim}[commandchars=\\\{\}]
+    third = leptons \textcolor{darkgreen}{\textbf{except}} [Z\textcolor{blue}{.lep1}, Z\textcolor{blue}{.lep2}] \textcolor{darkgreen}{\textbf{max by}} pt
+    \textcolor{darkgreen}{\textbf{hist}} third.pt \textcolor{darkgreen}{\textbf{by}} \textcolor{blue}{regular}(\textcolor{darkorange}{100}, \textcolor{darkorange}{0}, \textcolor{darkorange}{250}) \textcolor{darkgreen}{\textbf{named}} \textcolor{darkorange}{"third_pt"}
+\}
+\end{Verbatim}
+
+\large
+\vspace{-0.45 cm}
+\uncover<2->{\mbox{ }\hfill\rule{0.5\linewidth}{0.4 pt}\hfill\mbox{ }}
+
+\vspace{0.2 cm}
+\uncover<2->{To define operations on sets, such as \textcolor{darkgreen}{\tt\textbf{join}}, \textcolor{darkgreen}{\tt\textbf{cross}}, \textcolor{darkgreen}{\tt\textbf{union}}, and \textcolor{darkgreen}{\tt\textbf{except}}, we need what SQL calls a surrogate-key index, so this has been added as an optional \mintinline{c++}{Identity} array, passed through all operations in Awkward 1.0.}
+\end{columns}
+\end{frame}
+
+
 
 
 \end{document}
