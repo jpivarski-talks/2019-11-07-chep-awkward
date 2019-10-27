@@ -60,7 +60,7 @@
 
 % START START START START START START START START START START START START START
 
-\begin{frame}{After reconstruction, physics analyzers need\ldots}
+\begin{frame}{In a data analysis, physicists need\ldots}
 \Large
 \vspace{-0.5 cm}
 
@@ -98,7 +98,7 @@ Results should pop up quickly enough that you don't lose your train of thought.
 \end{columns}
 \end{frame}
 
-\begin{frame}{Data structures can be arranged as columnar arrays}
+\begin{frame}{Any data structure can be arranged as columnar arrays}
 \begin{center}
 \only<1>{\vspace{0.75 cm}\includegraphics[width=0.8\linewidth]{google-dremel-fig1.png}}\only<2>{\includegraphics[width=0.55\linewidth]{google-dremel-fig1.png}}
 \end{center}
@@ -130,11 +130,11 @@ Results should pop up quickly enough that you don't lose your train of thought.
 \end{uncoverenv}
 \end{frame}
 
-\begin{frame}{Composable, vectorization-friendly data structures}
+\begin{frame}{Building columnar data structures from single-purpose parts}
 \large
 \vspace{0.25 cm}
 \begin{center}
-\only<1>{An array of variable-length arrays (``ragged'' or ``jagged'') can be built out of flattened contents and offsets specifying the beginning of each subarray.}\only<2>{Multiple levels of variable-length arrays (``doubly jagged'') can be built by using one jagged array as the content of the other.}\only<3>{More complex data structures can be built by adding columnar components, such as records with named fields, mixed data types, pointers, lazy loading\ldots}
+\only<1>{An array of variable-length arrays (``ragged'' or ``jagged'') can be built out of flattened contents and offsets specifying the beginning of each subarray.}\only<2>{Multiple levels of variable-length arrays (``doubly jagged'') can be built by using one jagged array as the content of the other.}\only<3>{Complex data structures can be built if you have enough columnar components, such as records with named fields, mixed data types, pointers, lazy loading\ldots}
 \end{center}
 
 \vspace{-0.25 cm}
@@ -238,8 +238,9 @@ For better flexibility, robustness, and uniformity, and in a few cases, speed, i
 The current implementation has some hidden limitations, such as \\ slicing in more than two jagged dimensions.
 
 \scriptsize
+\vspace{0.1 cm}
 \begin{minted}{python}
->>> import awkward
+>>> import awkward    # awkward 0.x
 >>> array = awkward.fromiter([[[0.0, 1.1, 2.2], [], [3.3, 4.4]],
 ...                           [[5.5]], [], [[6.6, 7.7, 8.8, 9.9]]])
 >>> array[::-1, ::2, 1:].tolist()
@@ -251,11 +252,12 @@ The current implementation has some hidden limitations, such as \\ slicing in mo
 
 \large
 \vspace{0.5 cm}
-But the new implementation is based on recursive procedures that \\ can go arbitrarily deep.
+But the new implementation is based on \mintinline{c++}{for} loops and recursive procedures that can go arbitrarily deep.
 
 \scriptsize
+\vspace{0.1 cm}
 \begin{minted}{python}
->>> import awkward1
+>>> import awkward1   # awkward 1.0
 >>> array = awkward1.fromiter([[[0.0, 1.1, 2.2], [], [3.3, 4.4]],
 ...                            [[5.5]], [], [[6.6, 7.7, 8.8, 9.9]]])
 >>> awkward1.tolist(array[::-1, ::2, 1:])
