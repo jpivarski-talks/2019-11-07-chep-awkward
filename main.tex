@@ -436,8 +436,17 @@ leptons = electrons \textcolor{darkgreen}{\textbf{union}} muons
 \end{columns}
 \end{frame}
 
-\begin{frame}{PERFORMANCE PLOTS}
+\begin{frame}{Converting record-oriented data into columnar data is much faster}
+\small
+\vspace{0.3 cm}
+\textcolor{gray}{Uncompressed data in warm cache; $\sim$5~GB samples in binary format; AWS r5ad.xlarge instance;}
 
+\textcolor{gray}{measuring the wall time needed to copy from source into jagged$^N$ arrays.}
+
+\vspace{-0.1 cm}
+\begin{center}
+\includegraphics[width=0.83\linewidth]{read_ttree.pdf}
+\end{center}
 \end{frame}
 
 \begin{frame}{Multi-paradigm arrays}
